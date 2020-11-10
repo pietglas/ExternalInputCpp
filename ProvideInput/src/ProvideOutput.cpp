@@ -13,20 +13,19 @@ ProvideOutput& ProvideOutput::getInstance(char *outputaddr)
 void ProvideOutput::waitForInput()
 {
 	std::signal(SIGINT, signalHandler);
-
+	std::cerr << "waitForInput: waiting for input" << std::endl;
 	while(signum == 0)
 	{
-		// std::getline(std::cin, strinput);
-		// input = strinput.c_str();
 		std::cin.getline(input, DEFAULT_BUFLEN);
 
-		if (strinput.length() != 0)
+		if (strlen(input) != 0)
 		{
 			int result = sendInput();
 			if (result == SOCKET_ERROR)
 			{
 				break;
 			}
+			memset(input, 0, DEFAULT_BUFLEN);
 		}
 	}
 	closeSock();
@@ -125,6 +124,7 @@ void ProvideOutput::closeSock()
 
 void ProvideOutput::signalHandler(int signm)
 {
+	std::cerr << "ProvideOutput::signalHandler: Received Ctrl+C signal" << std::endl;
 	signum = signm;
 }
 

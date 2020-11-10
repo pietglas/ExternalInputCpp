@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 			NULL,				// process handle not inheritable
 			NULL,				// thread handle not inheritable	
 			FALSE,				// set handle inheritance to false
-			0,					// no creation flags
+			CREATE_NEW_CONSOLE,	// no creation flags
 			NULL,				// use parent's environment block
 			NULL,				// use parent's startup directory
 			&startinfo,			// pointer to STARTUPINFO structure
@@ -115,24 +115,14 @@ int main(int argc, char** argv)
 	        iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
 	        if (iResult > 0) 
 	        {
-	            printf("Bytes received: %d\n", iResult);
-
-	        	// Echo the buffer back to the sender
-	            iSendResult = send( ClientSocket, recvbuf, iResult, 0 );
-	            if (iSendResult == SOCKET_ERROR) 
-	            {
-	                printf("send failed with error: %d\n", WSAGetLastError());
-	                closesocket(ClientSocket);
-	                WSACleanup();
-	                return 1;
-	            }
-	            printf("Bytes sent: %d\n", iSendResult);
+	            std::cout << recvbuf << std::endl;
+	            memset(recvbuf, 0, DEFAULT_BUFLEN);
 	        }
 	        else if (iResult == 0)
-	            printf("Connection closing...\n");
+	            std::cerr << "Connection closing..." << std::endl;
 	        else  
 	        {
-	            printf("recv failed with error: %d\n", WSAGetLastError());
+	            std::cerr << "recv failed with error: " << WSAGetLastError() << std::endl;
 	            closesocket(ClientSocket);
 	            WSACleanup();
 	            return 1;
@@ -143,7 +133,7 @@ int main(int argc, char** argv)
 	    // shutdown the connection since we're done
 	    iResult = shutdown(ClientSocket, SD_SEND);
 	    if (iResult == SOCKET_ERROR) {
-	        printf("shutdown failed with error: %d\n", WSAGetLastError());
+	        std::cerr << "shutdown failed with error: " << WSAGetLastError() << std::endl;
 	        closesocket(ClientSocket);
 	        WSACleanup();
 	        return 1;
