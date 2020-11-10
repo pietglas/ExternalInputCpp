@@ -73,8 +73,8 @@ int main(int argc, char** argv)
     }
 
     // Start a seperate process voor std::cin
-    char* module = (char*)"C:\\Users\\Piet\\ExternalInputCpp\\ProvideInput\\build\\src\\main.exe";
-    char* host = (char*)"main.exe localhost";
+    char* module = (char*)"..\\ProvideInput\\main_input.exe";
+    char* host = (char*)"main_input.exe localhost";
     STARTUPINFO startinfo;
     PROCESS_INFORMATION procinfo;
 
